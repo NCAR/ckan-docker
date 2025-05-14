@@ -4,6 +4,8 @@ volumes:
   solr_data:
   pip_cache:
   site_packages:
+  waf_dir:
+  home_dir:
 
 services:
 
@@ -14,6 +16,8 @@ services:
     networks:
       - webnet
       - ckannet
+    volumes:
+      - waf_dir:/var/www/html
     depends_on:
       ckan:
         condition: service_healthy
@@ -44,6 +48,8 @@ services:
       - ckan_storage:/var/lib/ckan
       - pip_cache:/root/.cache/pip
       - site_packages:/usr/lib/python3.10/site-packages
+      - home_dir:/srv/app/
+      - waf_dir:/var/www/html
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000/api/action/status_show"]
