@@ -17,11 +17,13 @@
      mkdir NCAR
      cd NCAR
      ln -s $SRC_DIR/ckanext-dsetsearch .
+     cd
   fi
 
   # Initialize the harvester DB tables
-  cd
-  ckan -c ./ckan.ini db upgrade -p harvest
+  if [[ $CKAN__PLUGINS == *"harvest"* ]]; then
+       ckan -c ~/ckan.ini db upgrade -p harvest
+  fi
 
 
   # Use custom Solr schema for DASH Search

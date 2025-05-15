@@ -1,5 +1,7 @@
 #!/bin/bash
 
+if [[ $CKAN__PLUGINS == *"dsetsearch"* ]]; then
+
   # Show commands that are run
   set -x
 
@@ -20,7 +22,7 @@
 #" /etc/ckan/default/ckan.ini
   ckan config-tool ./ckan.ini ckanext.dsetsearch.enable_search_format_ui=true
   ckan config-tool ./ckan.ini ckanext.dsetsearch.enable_publisher_facet=true
-  ckan config-tool ./ckan.ini ckanext_dsetsearch_banner_message=''
+  ckan config-tool ./ckan.ini ckanext_dsetsearch_banner_message='test'
 
 
 
@@ -50,13 +52,17 @@
 #ckanext.spatial.common_map.custom.url = https://tile.openstreetmap.org/{z}/{x}/{y}.png \n\
 #ckanext.spatial.common_map.attribution = &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors \n\
 #" /etc/ckan/default/ckan.ini
-  ckan config-tool ./ckan.ini ckan.harvest.mq.type=redis 
+
+  # Add configuration toggle for enabling/disabling harvest error email notification
+  ckan config-tool ./ckan.ini ckan.harvest.status_mail.errored=true
+  ckan config-tool ./ckan.ini ckan.harvest.mq.type=redis
   ckan config-tool ./ckan.ini ckan.harvest.log_scope=1 
   ckan config-tool ./ckan.ini ckan.harvest.log_timeframe=10 
   ckan config-tool ./ckan.ini ckan.harvest.log_level=info 
-  ckan config-tool ./ckan.ini ckanext.spatial.harvest.user_name=admin 
-  ckan config-tool ./ckan.ini ckanext.spatial.search_backend=solr-spatial-field 
-  ckan config-tool ./ckan.ini ckanext.spatial.use_postgis_sorting=false 
+  ckan config-tool ./ckan.ini ckanext.spatial.harvest.user_name=ckan_admin
+  #ckan config-tool ./ckan.ini ckanext.spatial.search_backend=solr-spatial-field
+  ckan config-tool ./ckan.ini ckanext.spatial.search_backend=solr-bbox
+  ckan config-tool ./ckan.ini ckanext.spatial.use_postgis_sorting=false
   ckan config-tool ./ckan.ini ckan.spatial.validator.profiles='iso19139, dset-minimum-fields-production, geographic-extent-validator, temporal-extent-validator, collections-validator'
   ckan config-tool ./ckan.ini ckanext.spatial.common_map.type=custom 
   ckan config-tool ./ckan.ini ckanext.spatial.common_map.custom.url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -73,24 +79,14 @@
 
 
   # Update Email Notification settings in [app:main] section
-  #sed -i "s|email_to = |email_to = yourEmail@ucar.edu|" /etc/ckan/default/ckan.ini
-  #sed -i "s|error_email_from = |error_email_from = vagrant-ckan@localhost|" /etc/ckan/default/ckan.ini
-  #sed -i "s|smtp.server = localhost|smtp.server = smtp.gmail.com:587|" /etc/ckan/default/ckan.ini
-  #sed -i "s|smtp.starttls = false|smtp.starttls = True|" /etc/ckan/default/ckan.ini
-  #sed -i "s|smtp.user = |smtp.user = yourEmail@ucar.edu|" /etc/ckan/default/ckan.ini
-  #sed -i "s|smtp.password = |smtp.password = your_CIT_Password|" /etc/ckan/default/ckan.ini
-  #sed -i "s|smtp.mail_from =|smtp.mail_from = vagrant-ckan@ucar.edu|" /etc/ckan/default/ckan.ini
 
-  ckan config-tool --edit ./ckan.ini email_to=yourEmail@ucar.edu
-  ckan config-tool --edit ./ckan.ini error_email_from=vagrant-ckan@localhost
-  ckan config-tool --edit ./ckan.ini smtp.server=smtp.gmail.com:587
-  ckan config-tool --edit ./ckan.ini smtp.starttls=True
-  ckan config-tool --edit ./ckan.ini smtp.user=yourEmail@ucar.edu
-  ckan config-tool --edit ./ckan.ini smtp.password=your_CIT_Password
-  ckan config-tool --edit ./ckan.ini smtp.mail_from=vagrant-ckan@ucar.edu
+#  ckan config-tool --edit ./ckan.ini email_to=yourEmail@ucar.edu
+#  ckan config-tool --edit ./ckan.ini error_email_from=vagrant-ckan@localhost
+#  ckan config-tool --edit ./ckan.ini smtp.server=smtp.gmail.com:587
+#  ckan config-tool --edit ./ckan.ini smtp.starttls=True
+#  ckan config-tool --edit ./ckan.ini smtp.user=yourEmail@ucar.edu
+#  ckan config-tool --edit ./ckan.ini smtp.password=your_CIT_Password
+#  ckan config-tool --edit ./ckan.ini smtp.mail_from=vagrant-ckan@ucar.edu
 
-  # Add configuration toggle for enabling/disabling harvest error email notification
-  #sed -i "/error_email_from =/a \ \n\
-#ckan.harvest.status_mail.errored = true \
-#" /etc/ckan/default/ckan.ini
-  ckan config-tool ./ckan.ini ckan.harvest.status_mail.errored=true
+
+fi

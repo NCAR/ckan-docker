@@ -1,11 +1,20 @@
 FROM ckan/ckan-base:2.11
 
+# Workaround from https://github.com/ckan/ckan-docker/issues/196
+USER root
+RUN mkdir /srv/app/.local && chown ckan /srv/app/.local
+RUN mkdir /srv/app/.cache && chown ckan /srv/app/.cache
+USER ckan
+
+
 # Install any extensions needed by your CKAN instance
 # See Dockerfile.dev for more details and examples
 
 ### Harvester ###
 RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-harvest.git@main#egg=ckanext-harvest' && \
-    pip3 install -r ${APP_DIR}/src/ckanext-harvest/pip-requirements.txt
+    pip3 install -r ${APP_DIR}/src/ckanext-harvest/pip-requirements.txt && \
+    pip3 install -r ${APP_DIR}/src/ckanext-harvest/dev-requirements.txt
+
 # will also require gather_consumer and fetch_consumer processes running (please see https://github.com/ckan/ckanext-harvest)
 
 ### Spatial Harvester ###
@@ -13,14 +22,11 @@ RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-spatial.git@main#egg=ck
     pip3 install -r ${APP_DIR}/src/ckanext-spatial/pip-requirements.txt
 
 ### Repo Info; required by dsetsearch plugin ###
-RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-repo.git@main#egg=ckanext-repo' 
-
-
+RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-repo.git@main#egg=ckanext-repo'
 
 ### DASH Search custom plugin
 RUN  pip3 install -e git+https://67704c9484c2b63f308a9a2269932d4dda57b36f@github.com/NCAR/ckanext-dsetsearch.git#egg=ckanext-dsetsearch && \
      pip3 install -r ${APP_DIR}/src/ckanext-dsetsearch/pip-requirements.txt
-
 
 
 # Copy custom initialization scripts
@@ -36,7 +42,6 @@ RUN mkdir -p /var/www/html && chown ckan /var/www/html
 
 
 USER ckan
-
 RUN for d in $APP_DIR/patches/*; do \
         if [ -d $d ]; then \
             for f in `ls $d/*.patch | sort -g`; do \
