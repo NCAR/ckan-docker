@@ -61,8 +61,7 @@ if [[ $CKAN__PLUGINS == *"dsetsearch"* ]]; then
   ckan config-tool ./ckan.ini ckan.harvest.log_timeframe=10 
   ckan config-tool ./ckan.ini ckan.harvest.log_level=info 
   ckan config-tool ./ckan.ini ckanext.spatial.harvest.user_name=ckan_admin
-  #ckan config-tool ./ckan.ini ckanext.spatial.search_backend=solr-spatial-field
-  ckan config-tool ./ckan.ini ckanext.spatial.search_backend=solr-bbox
+  ckan config-tool ./ckan.ini ckanext.spatial.search_backend=solr-spatial-field
   ckan config-tool ./ckan.ini ckanext.spatial.use_postgis_sorting=false
   ckan config-tool ./ckan.ini ckan.spatial.validator.profiles='iso19139, dset-minimum-fields-production, geographic-extent-validator, temporal-extent-validator, collections-validator'
   ckan config-tool ./ckan.ini ckanext.spatial.common_map.type=custom 
