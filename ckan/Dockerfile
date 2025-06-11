@@ -30,6 +30,15 @@ RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-repo.git@main#egg=ckane
 RUN  pip3 install -e "git+https://${TOKEN}@github.com/NCAR/ckanext-dsetsearch.git#egg=ckanext-dsetsearch" && \
      pip3 install -r ${APP_DIR}/src/ckanext-dsetsearch/pip-requirements.txt
 
+### Plugins for filtering on publication date and temporal extent
+RUN  pip3 install -e "git+https://github.com/NCAR/ckanext-datesearch.git#egg=ckanext-datesearch"
+
+RUN  pip3 install -e "git+https://github.com/NCAR/ckanext-extentsearch.git#egg=ckanext-extentsearch"
+
+### Provide sitemap and Pure feed
+RUN  pip3 install -e "git+https://github.com/NCAR/ckanext-sitemap.git#egg=ckanext-sitemap"
+
+
 
 # Copy custom initialization scripts
 COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/

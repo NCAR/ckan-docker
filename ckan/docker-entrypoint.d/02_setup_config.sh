@@ -5,13 +5,14 @@ if [[ $CKAN__PLUGINS == *"dsetsearch"* ]]; then
   # Show commands that are run
   set -x
 
-  ckan config-tool --edit ./ckan.ini ckan.site_title='Vagrant DASH Search'
+  ckan config-tool --edit ./ckan.ini ckan.site_title='Docker DASH Search'
 
   ckan config-tool --edit ./ckan.ini ckan.site_description='NCAR data search and discovery'
 
   ckan config-tool --edit ./ckan.ini ckan.auth.public_user_details=false
 
   # Keep the favicon value unchanged; its config setting differs across CKAN versions.
+  ckan config-tool --edit ./ckan.ini ckan.favicon='/NCARfavicon.ico'
 
   # Place DSETSearch plugin settings in [app:main] section (before Logging)
 #  sed -i "/## Logging configuration/i \ \n\

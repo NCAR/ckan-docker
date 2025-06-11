@@ -27,7 +27,10 @@
 
 
   # Use custom Solr schema for DASH Search
-
+  # Link in our modified Solr schema file to be used for solr.
+  cd $SRC_DIR/ckan/ckan/config/solr/
+  mv schema.xml schema.xml.ORIG_INSTALLED
+  ln -sf $SRC_DIR/ckanext-dsetsearch/solr/schema.solr-spatial-2.0.xml schema.xml
 
 
   # Download and use JTI for point-based geographic queries in DASH Search
