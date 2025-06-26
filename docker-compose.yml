@@ -56,6 +56,8 @@ services:
       interval: 60s
       timeout: 10s
       retries: 3
+    ports:
+      - "5000:5000"
     
   datapusher:
     networks:
@@ -68,6 +70,8 @@ services:
       interval: 60s
       timeout: 10s
       retries: 3
+    ports:
+      - "8800:8800"
 
   db:
     build:
@@ -89,6 +93,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+    ports:
+      - "5432:5432"
      
   solr:
     networks:
@@ -99,6 +105,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
+    ports:
+      - "8983:8983"
 
   redis:
     image: redis:${REDIS_VERSION}
@@ -107,6 +115,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-e", "QUIT"]
+    ports:
+      - "6379:6379"
     
 networks:
   webnet:
