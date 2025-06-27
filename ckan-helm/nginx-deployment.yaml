@@ -23,7 +23,7 @@ spec:
         io.kompose.service: nginx
     spec:
       containers:
-        - image: nginx
+        - image: nginx:stable-alpine
           name: nginx
           ports:
             - containerPort: 443
