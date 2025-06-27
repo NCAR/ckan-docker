@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /Users/bonnland/bin/kompose --file docker-compose.yml convert -c
+    kompose.version: 1.36.0 (ae2a39403)
+  labels:
+    io.kompose.service: ckan
+  name: ckan
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ckan
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /Users/bonnland/bin/kompose --file docker-compose.yml convert -c
+        kompose.version: 1.36.0 (ae2a39403)
+      labels:
+        io.kompose.service: ckan
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: env
+          image: ckan
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - -qO
+                - /dev/null
+                - http://localhost:5000/api/action/status_show
+            failureThreshold: 3
+            periodSeconds: 60
+            timeoutSeconds: 10
+          name: ckan
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/ckan
+              name: ckan-storage
+            - mountPath: /root/.cache/pip
+              name: pip-cache
+            - mountPath: /usr/lib/python3.10/site-packages
+              name: site-packages
+            - mountPath: /srv/app
+              name: home-dir
+            - mountPath: /var/www/html
+              name: waf-dir
+      restartPolicy: Always
+      volumes:
+        - name: ckan-storage
+          persistentVolumeClaim:
+            claimName: ckan-storage
+        - name: pip-cache
+          persistentVolumeClaim:
+            claimName: pip-cache
+        - name: site-packages
+          persistentVolumeClaim:
+            claimName: site-packages
+        - name: home-dir
+          persistentVolumeClaim:
+            claimName: home-dir
+        - name: waf-dir
+          persistentVolumeClaim:
+            claimName: waf-dir
