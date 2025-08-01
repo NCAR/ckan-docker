@@ -6,6 +6,7 @@ volumes:
   site_packages:
   local_bin:
   home_dir:
+  waf_dir:
 
 services:
 
@@ -30,6 +31,7 @@ services:
       - site_packages:/usr/local/lib/python3.10/site-packages
       - local_bin:/usr/local/bin
       - home_dir:/srv/app/
+      - waf_dir:/var/www/html
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
@@ -78,3 +80,4 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-e", "QUIT"]
+

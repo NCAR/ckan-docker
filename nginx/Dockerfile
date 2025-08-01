@@ -10,6 +10,7 @@ COPY setup/nginx.conf ${NGINX_DIR}/nginx.conf
 COPY setup/index.html /usr/share/nginx/html/index.html
 COPY setup/error.html /usr/share/nginx/html/error.html
 COPY setup/default.conf ${NGINX_DIR}/conf.d/
+COPY setup/waf.conf ${NGINX_DIR}/conf.d/
 
 RUN mkdir -p ${NGINX_DIR}/certs
 

@@ -1,7 +1,44 @@
 FROM ckan/ckan-base:2.11
 
+ARG TOKEN
+
+# Workaround from https://github.com/ckan/ckan-docker/issues/196
+USER root
+RUN mkdir /srv/app/.local && chown ckan /srv/app/.local
+RUN mkdir /srv/app/.cache && chown ckan /srv/app/.cache
+USER ckan
+
+
 # Install any extensions needed by your CKAN instance
 # See Dockerfile.dev for more details and examples
+
+### Harvester ###
+RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-harvest.git@main#egg=ckanext-harvest' && \
+    pip3 install -r ${APP_DIR}/src/ckanext-harvest/pip-requirements.txt && \
+    pip3 install -r ${APP_DIR}/src/ckanext-harvest/dev-requirements.txt
+
+# will also require gather_consumer and fetch_consumer processes running (please see https://github.com/ckan/ckanext-harvest)
+
+### Spatial Harvester ###
+RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-spatial.git@main#egg=ckanext-spatial' && \
+    pip3 install -r ${APP_DIR}/src/ckanext-spatial/pip-requirements.txt
+
+### Repo Info; required by dsetsearch plugin ###
+RUN pip3 install -e 'git+https://github.com/NCAR/ckanext-repo.git@main#egg=ckanext-repo'
+
+### DASH Search custom plugin
+RUN  pip3 install -e "git+https://${TOKEN}@github.com/NCAR/ckanext-dsetsearch.git#egg=ckanext-dsetsearch" && \
+     pip3 install -r ${APP_DIR}/src/ckanext-dsetsearch/pip-requirements.txt
+
+### Plugins for filtering on publication date and temporal extent
+RUN  pip3 install -e "git+https://github.com/NCAR/ckanext-datesearch.git#egg=ckanext-datesearch"
+
+RUN  pip3 install -e "git+https://github.com/NCAR/ckanext-extentsearch.git#egg=ckanext-extentsearch"
+
+### Provide sitemap and Pure feed
+RUN  pip3 install -e "git+https://github.com/NCAR/ckanext-sitemap.git#egg=ckanext-sitemap"
+
+
 
 # Copy custom initialization scripts
 COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
@@ -10,8 +47,12 @@ COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
 # runtime mounted ones)
 COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
 
-USER ckan
+# Make the WAF folder owned by ckan
+USER root
+RUN mkdir -p /var/www/html && chown ckan /var/www/html
 
+
+USER ckan
 RUN for d in $APP_DIR/patches/*; do \
         if [ -d $d ]; then \
             for f in `ls $d/*.patch | sort -g`; do \
