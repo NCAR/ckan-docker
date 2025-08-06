@@ -41,7 +41,7 @@ jobs:
        with:
           context: ./nginx
           file: ./nginx/Dockerfile
-          push: false
+          push: true
           tags: ncar/sage-dashsearch/nginx:${{ steps.date.outputs.date }}
 
     -  name: PostgreSQL build
