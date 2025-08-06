@@ -23,7 +23,7 @@ spec:
         io.kompose.service: solr
     spec:
       containers:
-        - image: ckan/ckan-solr:2.10-solr9-spatial
+        - image: solr
           livenessProbe:
             exec:
               command:
