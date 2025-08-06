@@ -42,7 +42,7 @@ jobs:
           context: ./nginx
           file: ./nginx/Dockerfile
           push: false
-          tags: sage-dashsearch-nginx:${{ steps.date.outputs.date }}
+          tags: ncar/sage-dashsearch-nginx:${{ steps.date.outputs.date }}
 
     -  name: PostgreSQL build
        uses: docker/build-push-action@v2
@@ -50,7 +50,7 @@ jobs:
           context: ./postgresql
           file: ./postgresql/Dockerfile
           push: false
-          tags: sage-dashsearch-postgres:${{ steps.date.outputs.date }}
+          tags: ncar/sage-dashsearch-postgres:${{ steps.date.outputs.date }}
 
     -  name: SOLR build
        uses: docker/build-push-action@v2
@@ -58,7 +58,7 @@ jobs:
           context: ./solr
           file: ./solr/Dockerfile
           push: false
-          tags: sage-dashsearch-solr:${{ steps.date.outputs.date }}
+          tags: ncar/sage-dashsearch-solr:${{ steps.date.outputs.date }}
           
     -  name: CKAN build
        uses: docker/build-push-action@v2
@@ -68,5 +68,5 @@ jobs:
           build-args: |
             TOKEN=${{ secrets.REPO_TOKEN }}
           push: false
-          tags: sage-dashsearch-ckan:${{ steps.date.outputs.date }}
+          tags: ncar/sage-dashsearch-ckan:${{ steps.date.outputs.date }}
       
