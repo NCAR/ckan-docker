@@ -52,7 +52,7 @@ jobs:
           context: ./nginx
           file: ./nginx/Dockerfile
           push: true
-          tags: sage-dashsearch-nginx:${{ steps.date.outputs.date }}
+          tags: ghcr.io/ncar/sage-dashsearch-nginx:${{ steps.date.outputs.date }}
 
     -  name: PostgreSQL build
        uses: docker/build-push-action@v2
