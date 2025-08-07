@@ -1,6 +1,6 @@
 apiVersion: v2
-name: dash-search
-description: A Helm chart for Kubernetes for the DASH Search web app deployment
+name: ckandev
+description: A Helm chart for Kubernetes for the DASH Search (Development) web app deployment
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -21,4 +21,4 @@ version: 0.0.1
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "2.11"
+appVersion: "2.11-spatial"
