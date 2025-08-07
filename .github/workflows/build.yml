@@ -80,5 +80,5 @@ jobs:
           build-args: |
             TOKEN=${{ secrets.REPO_TOKEN }}
           push: true
-          tags: ghcr.io/ncar/sage-dashsearch/ckan:${{ steps.date.outputs.date }}
+          tags: ghcr.io/ncar/sage-dashsearch-ckan:${{ steps.date.outputs.date }}
       
