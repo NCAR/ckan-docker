@@ -26,7 +26,7 @@ spec:
         - envFrom:
             - configMapRef:
                 name: env
-          image: ckan
+          image: "{{ .Values.webapp.image_ckan }}:{{ .Values.webapp.tag }}"
           livenessProbe:
             exec:
               command:

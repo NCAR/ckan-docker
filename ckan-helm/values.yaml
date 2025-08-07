@@ -1,0 +1,8 @@
+webapp:
+  name: ckandev
+  image_solr: ghcr.io/ncar/sage-dashsearch-solr
+  image_postgres: ghcr.io/ncar/sage-dashsearch-postgres
+  image_nginx: ghcr.io/ncar/sage-dashsearch-nginx
+  image_ckan: ghcr.io/ncar/sage-dashsearch-ckan
+  redis_version: 6
+  tag: 2025-08-07.19.14

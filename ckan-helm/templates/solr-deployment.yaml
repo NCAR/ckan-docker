@@ -23,7 +23,7 @@ spec:
         io.kompose.service: solr
     spec:
       containers:
-        - image: solr
+        - image: "{{ .Values.webapp.image_solr }}:{{ .Values.webapp.tag }}"
           livenessProbe:
             exec:
               command:
