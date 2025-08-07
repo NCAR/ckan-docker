@@ -10,3 +10,4 @@ _src/*
 local/*
 .env
 .github_token
+.packages_token
