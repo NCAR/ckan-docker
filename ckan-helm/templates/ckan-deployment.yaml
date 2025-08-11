@@ -26,7 +26,14 @@ spec:
         - envFrom:
             - configMapRef:
                 name: env
-          image: ckan/ckan-base:2.11
+          image: "{{ .Values.webapp.image_ckan }}:{{ .Values.webapp.tag }}"
+          resources: # Add this block
+            requests:
+              cpu: "2"  # Example: request 250 milliCPU
+              memory: "8Gi" # Example: request 512 MiB of memory
+            limits:
+              cpu: "2"  # Example: limit to 500 milliCPU
+              memory: "8Gi"   # Example: limit to 1 GiB of memory
           livenessProbe:
             exec:
               command:

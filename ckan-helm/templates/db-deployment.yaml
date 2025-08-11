@@ -42,7 +42,7 @@ spec:
               value: postgres
             - name: POSTGRES_USER
               value: postgres
-          image: postgres:16-alpine
+          image: "{{ .Values.webapp.image_postgres }}:{{ .Values.webapp.tag }}"
           livenessProbe:
             exec:
               command:
