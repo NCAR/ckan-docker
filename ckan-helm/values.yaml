@@ -14,3 +14,50 @@ webapp:
     nginx: ghcr.io/ncar/sage-dashsearch-nginx
     ckan: ghcr.io/ncar/sage-dashsearch-ckan
   tag: 2025-09-22.19.40
+
+nginx-ingress:
+  enabled: true
+  controller:
+    config:
+      http-snippet: |
+        # Rate limiter using a mapped variable from the query arg _tags_limit
+        map $arg__tags_limit $do_limit {
+          "0"         "all";
+          default     "";
+        }
+        limit_req_zone $do_limit zone=mapped_limit:10m rate=200r/m;
+
+        # Advanced bot filter map
+        map $http_user_agent $bad_bot {
+          default 0;
+          # Block list
+          ~*(MSIE\ [1-9]\.0|Windows\ 95|Trident/3|DotBot|PetalBot|YandexBot|Applebot|CCBot|GoogleOther) 1;
+          ~*Firefox\/([1-2]?[0-9]\.|30\.) 1;
+          ~*Android\ [1-4]\. 1;
+          ~*AppleWebKit\/5[2-7]\. 1;
+          ~*Version\/[3-4]\. 1;
+          ~*Chrome\/([1-3][0-9]\.|40\.) 1;
+          ~*Presto 1;
+          ~*Windows\ NT\ 5\. 1;
+          ~*Windows\ 98 1;
+          ~*Windows\ NT\ 4\.0 1;
+          ~*PPC\ Mac\ OS\ X 1;
+          # CKAN uses 'python-requests', so don't block it.
+          # Allow 'curl' and 'wget', as we use them for diagnosing problems.
+          # Known scrapers, CLI, and bot UAs
+          ~*(Go-http-client|libwww|Python-urllib|Java/|Apache-HttpClient|lwp-request|PHPCrawl|Nutch|Scrapy|HTTrack|axios/|okhttp/) 1;
+        }
+
+ckan:
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/server-snippet: |
+        # Block requests identified as bad bots
+        if ($bad_bot) {
+          return 403;
+        }
+        # Only apply rate limiting if $do_limit is set (i.e., _tags_limit=0)
+        if ($do_limit) {
+          limit_req zone=mapped_limit burst=20 nodelay;
+        }
