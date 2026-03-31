@@ -1,7 +1,8 @@
 # generic
 .DS_Store
 .vagrant
-.idea
+.idea/
+.vscode/
 
 # code & config
 _service-provider/*
@@ -11,3 +12,6 @@ local/*
 .env
 .github_token
 .packages_token
+
+# Ignore CKAN plugins
+src/
