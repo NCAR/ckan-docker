@@ -11,7 +11,19 @@
 4. Run this command:  `docker compose -f docker-compose.yml build`
 5. Then run: `docker compose -f docker-compose.yml up`
 6. The nginx service will come up last, at which point you can browse to [https://localhost:8443](https://localhost:8443).
-7. Use the command `docker compose down -v` to remove pre-existing data from volumes and start from scratch
+7. To login to the container, run 'docker ps' and `docker exec -it ckan-docker-ckan-1 /bin/bash`
+8. Use the command `docker compose down -v` to remove pre-existing data from volumes and start from scratch
+
+## PyCharm tips
+
+NOTE:  These steps currently clone plugins during build.   They should instead be injected by PyCharm and installed 
+somehow later.
+
+To remote debug from a clean state:  
+1. `docker compose down -v`.  Use Docker Desktop dashboard to clear all containers to allow folders to clear.
+2. Go to dsetsearch plugin and in helpers.py, uncomment import pycharm line, and choose IP address '10.0.*' for home IP
+3. Run this command:  `docker compose -f docker-compose.yml build`
+4. 
     
 ### Harvesting Test Records
 
