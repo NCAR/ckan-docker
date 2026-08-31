@@ -4,7 +4,7 @@ on:
   #workflow dispatch adds a button to run on github and is useful to always have there
   workflow_dispatch:
   # Trigger the workflow on push or pull request,
-  # but only for the master branch
+  # but only for the main branch
   push:
     branches:
       - main

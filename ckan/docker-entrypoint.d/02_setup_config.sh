@@ -32,7 +32,6 @@ if [[ $CKAN_PLUGINS == *"dsetsearch"* ]]; then
   ckan config-tool --edit ./ckan.ini ckan.redis.url="${CKAN_REDIS_URL}"
 
   ckan config-tool ./ckan.ini ckanext.dsetsearch.enable_search_format_ui=true
-  ckan config-tool ./ckan.ini ckanext.dsetsearch.enable_publisher_facet=true
   ckan config-tool ./ckan.ini ckanext_dsetsearch_banner_message='test'
 
 
@@ -60,6 +59,7 @@ if [[ $CKAN_PLUGINS == *"dsetsearch"* ]]; then
   ckan config-tool --edit ./ckan.ini error_email_from=donotreply@ucar.edu
 
   #  These settings are subject to change, depending on the deployment
+  ckan config-tool ./ckan.ini ckanext.dsetsearch.enable_publisher_facet=true
   ckan config-tool --edit ./ckan.ini ckan.site_title='DASH Search (Development)'
   ckan config-tool --edit ./ckan.ini ckan.site_description='NCAR data search and discovery'
 

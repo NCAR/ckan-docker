@@ -9,6 +9,8 @@ webapp:
   container:
     image: nginx
     port: 443
+  externalSecret:
+    secretPath: "sage/sage-ckan/ckandev"
   images:
     solr: ghcr.io/ncar/sage-dashsearch-solr
     postgres: ghcr.io/ncar/sage-dashsearch-postgres
