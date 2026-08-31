@@ -4,14 +4,16 @@ on:
   #workflow dispatch adds a button to run on github and is useful to always have there
   workflow_dispatch:
   # Trigger the workflow on push or pull request,
-  # but only for the master branch
+  # but only for the main branch
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
+env:
+  PACKAGE_PREFIX: sage
 
 jobs: 
   build:  
@@ -55,7 +57,7 @@ jobs:
           context: ./nginx
           file: ./nginx/Dockerfile
           push: true
-          tags: ghcr.io/ncar/sage-dashsearch-nginx:${{ steps.date.outputs.date }}
+          tags: ghcr.io/ncar/${{ env.PACKAGE_PREFIX }}-dashsearch-nginx:${{ steps.date.outputs.date }}
 
     -  name: PostgreSQL build
        uses: docker/build-push-action@v6
@@ -63,7 +65,7 @@ jobs:
           context: ./postgresql
           file: ./postgresql/Dockerfile
           push: true
-          tags: ghcr.io/ncar/sage-dashsearch-postgres:${{ steps.date.outputs.date }}
+          tags: ghcr.io/ncar/${{ env.PACKAGE_PREFIX }}-dashsearch-postgres:${{ steps.date.outputs.date }}
 
     -  name: SOLR build
        uses: docker/build-push-action@v6
@@ -71,7 +73,7 @@ jobs:
           context: ./solr
           file: ./solr/Dockerfile
           push: true
-          tags: ghcr.io/ncar/sage-dashsearch-solr:${{ steps.date.outputs.date }}
+          tags: ghcr.io/ncar/${{ env.PACKAGE_PREFIX }}-dashsearch-solr:${{ steps.date.outputs.date }}
           
     -  name: CKAN build
        uses: docker/build-push-action@v6
@@ -79,5 +81,5 @@ jobs:
           context: ./ckan
           file: ./ckan/Dockerfile
           push: true
-          tags: ghcr.io/ncar/sage-dashsearch-ckan:${{ steps.date.outputs.date }}
+          tags: ghcr.io/ncar/${{ env.PACKAGE_PREFIX }}-dashsearch-ckan:${{ steps.date.outputs.date }}
       

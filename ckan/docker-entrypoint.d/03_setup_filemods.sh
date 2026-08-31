@@ -20,15 +20,15 @@
      cd
   fi
 
-  CKAN_PLUGINS=`grep plugins ${APP_DIR}/ckan.ini`
+  PLUGINS=`grep plugins ${APP_DIR}/ckan.ini`
 
   # Provide library needed by Google Analytics plugin
-  if [[ $CKAN_PLUGINS == *"googleanalytics"* ]]; then
+  if [[ $PLUGINS == *"googleanalytics"* ]]; then
        pip install oauth2client==4.1.3
   fi
 
   # Initialize the harvester DB tables
-  if [[ $CKAN_PLUGINS == *"harvest"* ]]; then
+  if [[ $PLUGINS == *"harvest"* ]]; then
        ckan -c ~/ckan.ini db upgrade -p harvest
   fi
 

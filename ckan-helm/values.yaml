@@ -9,9 +9,11 @@ webapp:
   container:
     image: nginx
     port: 443
+  externalSecret:
+    secretPath: "sage/sage-ckan/ckandev"
   images:
     solr: ghcr.io/ncar/sage-dashsearch-solr
     postgres: ghcr.io/ncar/sage-dashsearch-postgres
     nginx: ghcr.io/ncar/sage-dashsearch-nginx
     ckan: ghcr.io/ncar/sage-dashsearch-ckan
-  tag: 2026-02-13.21.13
+  tag: 2026-08-31.20.36
