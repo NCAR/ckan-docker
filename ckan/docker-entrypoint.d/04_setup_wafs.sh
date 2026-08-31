@@ -1,9 +1,9 @@
 
-CKAN_PLUGINS=`grep plugins ${APP_DIR}/ckan.ini`
+PLUGINS=`grep plugins ${APP_DIR}/ckan.ini`
 
 # Add WAF for spatial harvesting
 
-if [[ $CKAN_PLUGINS == *"harvest"* ]]; then
+if [[ $PLUGINS == *"harvest"* ]]; then
 
   # Add API token to admin user, so we can create an Organization, thereby allowing creation of a WAF.
   # NOTE: The application is not always ready to accept HTTP requests at this point, so we try a different way below.
