@@ -30,6 +30,13 @@ spec:
       - name:
           solr
         image: "{{ .Values.webapp.images.solr }}:{{ .Values.webapp.tag }}"
+        resources: # Add this block
+          requests:
+            cpu: "4"
+            memory: "8Gi"
+          limits:
+            cpu: "4"
+            memory: "8Gi"
         ports:
           - containerPort: 8983
             protocol: TCP

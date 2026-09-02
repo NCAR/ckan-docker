@@ -6,7 +6,8 @@ EXPOSE 8983
 ENV SOLR_INSTALL="/opt/solr/"
 ENV SOLR_CONFIG_DIR="$SOLR_INSTALL/server/solr/configsets"
 ENV SOLR_SCHEMA_FILE="$SOLR_CONFIG_DIR/ckan/conf/managed-schema"
-ENV SOLR_HEAP="2g"
+ENV SOLR_JAVA_MEM="-Xms6g -Xmx6g"
+ENV GC_TUNE="-XX:+UseG1GC -XX:ParallelGCThreads=4 -XX:ConcGCThreads=2"
 
 USER root
 
