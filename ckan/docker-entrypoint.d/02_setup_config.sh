@@ -22,9 +22,6 @@ if [[ $CKAN_PLUGINS == *"dsetsearch"* ]]; then
   pip3 install -e ${SRC_EXTENSIONS_DIR}/ckanext-dsetsearch && \
   pip3 install -r ${SRC_EXTENSIONS_DIR}/ckanext-dsetsearch/pip-requirements.txt
 
-  # Show commands that are run (don't show REPO_TOKEN)
-  set -x
-
   ckan config-tool --edit ./ckan.ini ckan.auth.public_user_details=false
   ckan config-tool --edit ./ckan.ini ckan.cors.origin_allow_all=true
 

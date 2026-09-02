@@ -1,41 +1,31 @@
 
+# Add WAFs for spatial harvesting
 PLUGINS=`grep plugins ${APP_DIR}/ckan.ini`
-
-# Add WAF for spatial harvesting
 
 if [[ $PLUGINS == *"harvest"* ]]; then
 
-  # Add API token to admin user, so we can create an Organization, thereby allowing creation of a WAF.
-  # NOTE: The application is not always ready to accept HTTP requests at this point, so we try a different way below.
-#  if [ ! -d "/tmp/apikey.txt" ]; then
-#      ckan -c ~/ckan.ini user token add ckan_admin api-token | tail -1 | xargs > /tmp/apikey.txt
-#      apiKey=`cat /tmp/apikey.txt`
-#      wget -O /tmp/responseOrg.json --header="Authorization: ${apiKey}" --post-data='{"name": "ncar", "title": "NCAR"}' 'http://localhost:5000/api/3/action/organization_create'
-#  fi
-
-  # Add API token to admin user, so we can create an Organization, thereby allowing creation of a WAF.
-  if [ ! -d "/tmp/apikey.txt" ]; then
-      pip install ckanapi
-      /srv/app/.local/bin/ckanapi action organization_create name=ncar title=NCAR
-  fi
+  # Make sure WAF organizations are created
+  pip install ckanapi
+  ORGANIZATION_NAMES="NCAR"
+  for org in $ORGANIZATION_NAMES; do
+        /srv/app/.local/bin/ckanapi action organization_create name=${org} title=${org}
+  done
 
   ls -l /var/www/*
 
-  if [ ! -d "/var/www/html/sagedev-dset-harvest-test" ]; then
-      cd /var/www/html && \
-      git clone https://github.com/NCAR/sagedev-dset-harvest-test.git
-      # We can't run this command right away, because nginx has not started up yet.
-      #ckan -c ~/ckan.ini harvester run-test mini-waf
-  fi
-  ckan -c ~/ckan.ini harvester source create "sagedev-dset-harvest-test" "http://nginx:9000/sagedev-dset-harvest-test" "waf" "MINI-WAF" "TRUE" "ncar" "MANUAL" '{"user" : "admin", "read_only": true}'
 
-#  if [ ! -d "/var/www/html/dset-web-accessible-folder-dev" ]; then
-#      cd /var/www/html && \
-#      git clone https://github.com/NCAR/dset-web-accessible-folder-dev.git
-#      # We can't run this command right away, because nginx has not started up yet.
-#      #ckan -c ~/ckan.ini harvester run-test mini-waf
-#  fi
-#  ckan -c ~/ckan.ini harvester source create "dset-web-accessible-folder-dev" "http://nginx:9000/dset-web-accessible-folder-dev" "waf" "DEV-WAF" "TRUE" "ncar" "MANUAL" '{"user" : "admin", "read_only": true}'
+  cd /var/www/html
+  WAF_FOLDERS="sagedev-dset-harvest-test dset-web-accessible-folder-dev"
+  for waf_folder in $WAF_FOLDERS; do
+      waf_url="https://github.com/NCAR/${waf_folder}.git"
+
+      if [ ! -d "/var/www/html/${waf_folder}" ]; then
+          git clone ${waf_url}
+      fi
+
+      # Make sure harvest source exists
+      ckan -c ~/ckan.ini harvester source create "${waf_folder}" "http://nginx:9000/${waf_folder}" "waf" "${waf_folder}" "TRUE" "NCAR" "MANUAL" '{"user" : "admin", "read_only": true}'
+  done
 
   # Return to home directory for supervisord startup
   cd

@@ -6,6 +6,7 @@ EXPOSE 8983
 ENV SOLR_INSTALL="/opt/solr/"
 ENV SOLR_CONFIG_DIR="$SOLR_INSTALL/server/solr/configsets"
 ENV SOLR_SCHEMA_FILE="$SOLR_CONFIG_DIR/ckan/conf/managed-schema"
+ENV SOLR_HEAP="2g"
 
 USER root
 

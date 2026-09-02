@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ckandev
-description: A Helm chart for Kubernetes for the DASH Search (Development) web app deployment
+description: A Helm chart for Kubernetes for the DASH Search web app deployment
 
 # A chart can be either an 'application' or a 'library' chart.
 #

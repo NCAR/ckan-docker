@@ -1,9 +1,5 @@
-# Use to install Production CKAN
+#FROM ckan/ckan-dev:2.11.4   # Use instead to install CKAN Developer/Debug tools
 FROM ckan/ckan-base:2.11.4
-
-# Use to install CKAN Developer/Debug tools
-#FROM ckan/ckan-dev:2.11.4
-
 
 # Workaround from https://github.com/ckan/ckan-docker/issues/196
 USER root
@@ -15,6 +11,8 @@ COPY config/*.sh  /srv/app
 
 RUN chown -R ckan:ckan-sys ${APP_DIR} && chmod 755 /srv/app/*.sh
 
+
+### Install everything we need for the harvester
 # Install cron and supervisor.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     cron \
@@ -23,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && mkdir -p /var/log/ckan/std /var/log/supervisor /etc/supervisor/conf.d \
     && chown -R ckan:ckan-sys /var/log/ckan /var/log/supervisor /etc/supervisor/conf.d
 
-# Config cron job for harvesting
+# Config supervisor for managing cron and harvest processes
 COPY config/supervisord_ckan.conf /etc/supervisor/conf.d/ckan.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
 COPY config/crontab /etc/cron.d/ckan-cron
@@ -39,12 +37,10 @@ COPY --chown=ckan-sys:ckan-sys setup/prerun.py ${APP_DIR}
 # Copy Pure XML for serving at endpoint <ckan_base_url>/pure.xml
 COPY --chown=ckan-sys:ckan-sys setup/pure.xml ${APP_DIR}
 
-# Apply any patches needed to CKAN core or any of the built extensions (not the
-# runtime mounted ones)
+# Apply any patches needed to CKAN core or any of the built extensions (not the runtime mounted ones)
 COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
 
 # Add supervisord invocation during startup
-#RUN sed -i '/uwsgi \$UWSGI_OPTS/i\    supervisord --configuration \/etc\/supervisord.d\/ckan.conf &' ${APP_DIR}/start_ckan.sh
 RUN sed -i '/uwsgi \$UWSGI_OPTS/i\    supervisord --configuration \/etc\/supervisor\/supervisord.conf &' ${APP_DIR}/start_ckan.sh
 
 # The permissions changes to /var/www/html MUST be applied here, as the rest of the time we are the ckan user.
