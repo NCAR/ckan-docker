@@ -12,8 +12,15 @@ if [[ $CKAN_PLUGINS == *"dsetsearch"* ]]; then
   fi
 
   ### Install DASH Search custom plugin at runtime, to avoid baking in secrets
-  pip3 install -e "git+https://${REPO_TOKEN}@github.com/NCAR/ckanext-dsetsearch.git@main#egg=ckanext-dsetsearch" && \
-  pip3 install -r /srv/app/src/ckanext-dsetsearch/pip-requirements.txt
+  if [ ! -d "${SRC_EXTENSIONS_DIR}/ckanext-dsetsearch" ]; then
+      cd ${SRC_EXTENSIONS_DIR}
+      git clone https://${REPO_TOKEN}@github.com/NCAR/ckanext-dsetsearch.git
+      cd ckanext-dsetsearch
+      git fetch
+      cd
+  fi
+  pip3 install -e ${SRC_EXTENSIONS_DIR}/ckanext-dsetsearch && \
+  pip3 install -r ${SRC_EXTENSIONS_DIR}/ckanext-dsetsearch/pip-requirements.txt
 
   # Show commands that are run (don't show REPO_TOKEN)
   set -x
