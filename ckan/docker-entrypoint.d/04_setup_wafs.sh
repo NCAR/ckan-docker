@@ -6,7 +6,7 @@ if [[ $PLUGINS == *"harvest"* ]]; then
 
   # Make sure WAF organizations are created
   pip install ckanapi
-  ORGANIZATION_NAMES="NCAR"
+  ORGANIZATION_NAMES="ncar"
   for org in $ORGANIZATION_NAMES; do
         /srv/app/.local/bin/ckanapi action organization_create name=${org} title=${org}
   done
