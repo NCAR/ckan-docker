@@ -25,6 +25,11 @@ spec:
       containers:
         - image: "{{ .Values.webapp.images.nginx }}:{{ .Values.webapp.tag }}"
           name: nginx
+          resources:
+            requests:
+              cpu: "4"  # Example: request 250 milliCPU
+            limits:
+              cpu: "4"  # Example: limit to 500 milliCPU
           ports:
             - containerPort: 443
               protocol: TCP
