@@ -12,6 +12,7 @@ data:
   # We *do* need the harvest plugin pre-installed to run the "ckan db harvest --upgrade" command at startup.
   CKAN__PLUGINS: "activity harvest"
   SRC_EXTENSIONS_DIR: "/srv/app/src"
+  EXTRA_UWSGI_OPTS: "--processes=4 --threads=2"
   CKAN_DATAPUSHER_URL: "http://datapusher:8800"
   CKAN_DATASTORE_READ_URL: "postgresql://datastore_ro:datastore@db/datastore"
   # Any variables commented out in this file are handled with external secrets.

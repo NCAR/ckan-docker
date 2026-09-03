@@ -15,6 +15,7 @@ RUN chown -R ckan:ckan-sys ${APP_DIR} && chmod 755 /srv/app/*.sh
 ### Install everything we need for the harvester
 # Install cron and supervisor.
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    procps \
     cron \
     supervisor \
     && rm -rf /var/lib/apt/lists/* \
