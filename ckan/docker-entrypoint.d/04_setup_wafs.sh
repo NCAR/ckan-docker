@@ -15,7 +15,8 @@ if [[ $PLUGINS == *"harvest"* ]]; then
 
 
   cd /var/www/html
-  WAF_FOLDERS="sagedev-dset-harvest-test dset-web-accessible-folder-dev"
+  #WAF_FOLDERS="sagedev-dset-harvest-test dset-web-accessible-folder-dev"
+  WAF_FOLDERS="sagedev-dset-harvest-test"
   for waf_folder in $WAF_FOLDERS; do
       waf_url="https://github.com/NCAR/${waf_folder}.git"
 
@@ -24,7 +25,7 @@ if [[ $PLUGINS == *"harvest"* ]]; then
       fi
 
       # Make sure harvest source exists
-      ckan -c ~/ckan.ini harvester source create "${waf_folder}" "http://nginx:9000/${waf_folder}" "waf" "${waf_folder}" "TRUE" "NCAR" "MANUAL" '{"user" : "admin", "read_only": true}'
+      ckan -c ~/ckan.ini harvester source create "${waf_folder}" "http://nginx:9000/${waf_folder}" "waf" "${waf_folder}" "TRUE" "ncar" "MANUAL" '{"user" : "admin", "read_only": true}'
   done
 
   # Return to home directory for supervisord startup
