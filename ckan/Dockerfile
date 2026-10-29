@@ -36,7 +36,7 @@ COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
 COPY --chown=ckan-sys:ckan-sys setup/prerun.py ${APP_DIR}
 
 # Copy Pure XML for serving at endpoint <ckan_base_url>/pure.xml
-COPY --chown=ckan-sys:ckan-sys setup/pure.xml ${APP_DIR}
+COPY --chown=ckan-sys:ckan-sys setup/pure-*.xml ${APP_DIR}
 
 # Apply any patches needed to CKAN core or any of the built extensions (not the runtime mounted ones)
 COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
